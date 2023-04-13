@@ -82,7 +82,7 @@ export function ImageMasonry() {
                     right: 10,
                   }}
                 >
-                  315
+                  315 likes
                 </Typography>
               </Box>
               <Typography

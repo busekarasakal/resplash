@@ -2,12 +2,10 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { Badge, useMediaQuery, useTheme } from '@mui/material';
+import { Badge } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useDeviceSize } from '../../hooks/useDeviceSize';
-import { useRef } from 'react';
 
 const StyledButton = styled(Button)(({ theme }) => ({
   color: theme.palette.grey['600'],
