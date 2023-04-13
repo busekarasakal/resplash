@@ -1,41 +1,117 @@
 import * as React from 'react';
 import Masonry from '@mui/lab/Masonry';
 import useProgressiveImage from '../../hooks/useProgressiveImage';
+import { useDeviceSize } from '../../hooks/useDeviceSize';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { Stack } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 export function ProgressiveImage({
   item,
 }: {
   item: { img: string; title: string };
 }) {
-  const [src, blur] = useProgressiveImage(
+  const { src, isLoading } = useProgressiveImage(
     `${item.img}?w=25&auto=format`,
     `${item.img}?w=162&auto=format`,
   );
 
   return (
-    <img
-      src={`${src}?w=162&auto=format`}
-      srcSet={`${src}?w=162&auto=format&dpr=2 2x`}
-      alt={item.title}
-      loading='lazy'
-      style={{
-        display: 'block',
-        width: '100%',
-        filter: blur ? 'blur(20px)' : 'none',
-        transition: blur ? 'none' : 'filter 0.3s ease-out',
-      }}
-    />
+    <Box id='progressive-img'>
+      <img
+        src={`${src}?w=162&auto=format`}
+        srcSet={`${src}?w=162&auto=format&dpr=2 2x`}
+        alt={item.title}
+        loading='lazy'
+        style={{
+          display: 'block',
+          width: '100%',
+          filter: isLoading ? 'blur(20px)' : 'none',
+          transition: isLoading ? 'none' : 'filter 0.3s ease-out',
+        }}
+      />
+    </Box>
   );
 }
 
 export function ImageMasonry() {
+  const { isLargeScreenDevice, isMediumScreenDevice } = useDeviceSize();
+  const imageColumnSize = isLargeScreenDevice
+    ? 3
+    : isMediumScreenDevice
+    ? 2
+    : 1;
+
   return (
-    <Masonry columns={3} spacing={3}>
+    <Masonry columns={imageColumnSize} spacing={3}>
       {itemData.map((item, index) => (
-        <div key={index}>
-          {/*<Label>{index + 1}</Label>*/}
-          <ProgressiveImage item={item} />
-        </div>
+        <Box key={index}>
+          <Box
+            sx={{
+              cursor: 'pointer',
+              transition: 'all .1s ease-in-out',
+              ':hover': {
+                transition: 'all 0.5s ease',
+                transform: 'scale(1.02)',
+                '& #progressive-img': {
+                  '-webkit-filter': 'brightness(60%)',
+                  '-webkit-transition': 'all 0.1s ease',
+                  '-moz-transition': 'all 0.1s ease',
+                  '-o-transition': 'all 0.1s ease',
+                  '-ms-transition': 'all 0.1s ease',
+                },
+                '& .MuiTypography-root': {
+                  display: 'block',
+                  '-webkit-filter': 'brightness(100%)',
+                },
+              },
+              '& .MuiTypography-root': {
+                display: 'none',
+              },
+            }}
+          >
+            <ProgressiveImage item={item} />
+            <Stack>
+              <Box>
+                <Typography
+                  color='lightgrey'
+                  sx={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10,
+                  }}
+                >
+                  315
+                </Typography>
+              </Box>
+              <Typography
+                color='white'
+                sx={{
+                  position: 'absolute',
+                  bottom: 40,
+                  left: 20,
+                }}
+              >
+                Buse Karasakal
+              </Typography>
+              <Typography
+                color='lightgrey'
+                fontSize={14}
+                noWrap
+                sx={{
+                  position: 'absolute',
+                  bottom: 20,
+                  left: 20,
+                  width: '85%',
+                }}
+              >
+                Lorem ipsum dolor sit amet
+                asdasdasdasdasdasddsdfasdfasgdasgdasdg
+              </Typography>
+            </Stack>
+          </Box>
+        </Box>
       ))}
     </Masonry>
   );
@@ -110,4 +186,4 @@ const itemData = [
     img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
     title: 'Bike',
   },
-].sort(() => Math.random() > 0.5 ? 1 : -1);
+].sort(() => (Math.random() > 0.5 ? 1 : -1));

@@ -11,6 +11,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { PopupMenu } from './PopupMenu';
 import { useDeviceSize } from '../hooks/useDeviceSize';
 import { ImageMasonry } from './ImageMasonry';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
+import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
+import SortIcon from '@mui/icons-material/Sort';
+import DeblurIcon from '@mui/icons-material/Deblur';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -68,19 +72,15 @@ export default function App() {
           }}
         >
           <Toolbar>
-            <Typography
-              variant='h6'
-              noWrap
-              component='div'
-              color={theme.palette.common.black}
+            <DeblurIcon
+              fontSize={'large'}
               sx={{
                 marginRight: theme.spacing(1),
                 cursor: 'pointer',
                 minWidth: theme.spacing(4),
+                color: theme.palette.common.black,
               }}
-            >
-              R
-            </Typography>
+            />
             <Search>
               <SearchIconWrapper>
                 <SearchIcon color={'action'} />
@@ -139,13 +139,41 @@ export default function App() {
               textAlign={isLargeScreenDevice ? 'left' : 'center'}
               noWrap
             >
-              TokyoTokyoTokyoTokyoTokyo
+              Tokyo
             </Typography>
           </Box>
           <Stack direction='row' gap={2}>
-            <PopupMenu />
-            <PopupMenu />
-            <PopupMenu />
+            <PopupMenu
+              options={[
+                { label: 'Black and White', value: 'black_and_white' },
+                { label: 'Blue', value: 'blue' },
+              ]}
+              text='Color'
+              icon={<ColorLensIcon />}
+              value={'red'}
+              onChange={() => {}}
+              isNewFunction
+            />
+            <PopupMenu
+              options={[
+                { label: 'Landscape', value: 'landscape' },
+                { label: 'Portrait', value: 'portrait' },
+              ]}
+              text='Orientation'
+              icon={<AutoAwesomeMosaicIcon />}
+              value={'landscape'}
+              onChange={() => {}}
+            />
+            <PopupMenu
+              text='Sort'
+              options={[
+                { label: 'Relevance', value: 'relevance' },
+                { label: 'Latest', value: 'latest' },
+              ]}
+              icon={<SortIcon />}
+              value={'popular'}
+              onChange={() => {}}
+            />
           </Stack>
         </Stack>
         <Stack alignItems='center'>

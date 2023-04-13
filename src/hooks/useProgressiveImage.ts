@@ -12,6 +12,6 @@ const useProgressiveImg = (lowQualitySrc: string, highQualitySrc: string) => {
     };
   }, [lowQualitySrc, highQualitySrc]);
 
-  return [src, src === lowQualitySrc];
+  return { src, isLoading: src === lowQualitySrc };
 };
 export default useProgressiveImg;

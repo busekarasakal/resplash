@@ -2,11 +2,12 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useMediaQuery, useTheme } from '@mui/material';
+import { Badge, useMediaQuery, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useDeviceSize } from '../../hooks/useDeviceSize';
+import { useRef } from 'react';
 
 const StyledButton = styled(Button)(({ theme }) => ({
   color: theme.palette.grey['600'],
@@ -25,7 +26,26 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export function PopupMenu() {
+type PopupMenuOption = {
+  label: string;
+  value: string;
+};
+
+export function PopupMenu({
+  icon,
+  text,
+  options,
+  onChange,
+  value,
+  isNewFunction,
+}: {
+  icon: React.ReactNode;
+  text: string;
+  options: PopupMenuOption[];
+  onChange: (value: string) => void;
+  value: string;
+  isNewFunction?: boolean;
+}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -40,31 +60,41 @@ export function PopupMenu() {
 
   return (
     <>
-      <StyledButton
-        id='basic-button'
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup='true'
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        variant='outlined'
-        startIcon={isLargeScreenDevice ? <MenuIcon /> : null}
-        endIcon={isLargeScreenDevice ? <ExpandMoreIcon /> : null}
-        disableRipple
-      >
-        {isLargeScreenDevice ? 'Menu' : 'M'}
-      </StyledButton>
-      <Menu
-        id='basic-menu'
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
+      <Badge
+        badgeContent={'New!'}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
         }}
+        color='error'
+        invisible={!isNewFunction}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <StyledButton
+          onClick={handleClick}
+          variant='outlined'
+          startIcon={isLargeScreenDevice ? icon : null}
+          endIcon={isLargeScreenDevice ? <ExpandMoreIcon /> : null}
+          disableRipple
+        >
+          {isLargeScreenDevice ? text : icon}
+        </StyledButton>
+      </Badge>
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+        {options.map((option) => {
+          const isSelected = option.value === value;
+          return (
+            <MenuItem
+              key={option.value}
+              onClick={() => {
+                onChange(option.value);
+                handleClose();
+              }}
+              selected={isSelected}
+            >
+              {option.label}
+            </MenuItem>
+          );
+        })}
       </Menu>
     </>
   );
