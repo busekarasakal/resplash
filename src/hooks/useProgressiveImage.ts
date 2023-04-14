@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
 
-const useProgressiveImg = (lowQualitySrc: string, highQualitySrc: string) => {
+export const useProgressiveImage = (
+  lowQualitySrc: string,
+  highQualitySrc: string,
+) => {
   const [src, setSrc] = useState(lowQualitySrc);
+  const isLoading = src === lowQualitySrc;
 
   useEffect(() => {
     setSrc(lowQualitySrc);
+
     const img = new Image();
     img.src = highQualitySrc;
     img.onload = () => {
@@ -12,6 +17,5 @@ const useProgressiveImg = (lowQualitySrc: string, highQualitySrc: string) => {
     };
   }, [lowQualitySrc, highQualitySrc]);
 
-  return { src, isLoading: src === lowQualitySrc };
+  return { src, isLoading };
 };
-export default useProgressiveImg;

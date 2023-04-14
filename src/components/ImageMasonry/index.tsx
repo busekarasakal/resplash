@@ -1,41 +1,14 @@
 import * as React from 'react';
 import Masonry from '@mui/lab/Masonry';
-import useProgressiveImage from '../../hooks/useProgressiveImage';
 import { useDeviceSize } from '../../hooks/useDeviceSize';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Stack } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-
-export function ProgressiveImage({
-  item,
-}: {
-  item: { img: string; title: string };
-}) {
-  const { src, isLoading } = useProgressiveImage(
-    `${item.img}?w=25&auto=format`,
-    `${item.img}?w=162&auto=format`,
-  );
-
-  return (
-    <Box id='progressive-img'>
-      <img
-        src={`${src}?w=162&auto=format`}
-        srcSet={`${src}?w=162&auto=format&dpr=2 2x`}
-        alt={item.title}
-        loading='lazy'
-        style={{
-          display: 'block',
-          width: '100%',
-          filter: isLoading ? 'blur(20px)' : 'none',
-          transition: isLoading ? 'none' : 'filter 0.3s ease-out',
-        }}
-      />
-    </Box>
-  );
-}
+import { Stack, useTheme } from '@mui/material';
+import { ProgressiveImage } from '../ProgressiveImage';
+import { MasonryImageWrapper } from './styled';
 
 export function ImageMasonry() {
+  const theme = useTheme();
   const { isLargeScreenDevice, isMediumScreenDevice } = useDeviceSize();
   const imageColumnSize = isLargeScreenDevice
     ? 3
@@ -45,64 +18,41 @@ export function ImageMasonry() {
 
   return (
     <Masonry columns={imageColumnSize} spacing={3}>
-      {itemData.map((item, index) => (
-        <Box key={index}>
-          <Box
-            sx={{
-              cursor: 'pointer',
-              transition: 'all .1s ease-in-out',
-              ':hover': {
-                transition: 'all 0.5s ease',
-                transform: 'scale(1.02)',
-                '& #progressive-img': {
-                  '-webkit-filter': 'brightness(60%)',
-                  '-webkit-transition': 'all 0.1s ease',
-                  '-moz-transition': 'all 0.1s ease',
-                  '-o-transition': 'all 0.1s ease',
-                  '-ms-transition': 'all 0.1s ease',
-                },
-                '& .MuiTypography-root': {
-                  display: 'block',
-                  '-webkit-filter': 'brightness(100%)',
-                },
-              },
-              '& .MuiTypography-root': {
-                display: 'none',
-              },
-            }}
-          >
+      {itemData.map((item) => (
+        <Box key={`image_${item.img}_${item.title}`}>
+          <MasonryImageWrapper>
             <ProgressiveImage item={item} />
             <Stack>
               <Box>
                 <Typography
-                  color='lightgrey'
+                  color={theme.palette.common.white}
                   sx={{
                     position: 'absolute',
-                    top: 10,
-                    right: 10,
+                    top: theme.spacing(1.5),
+                    right: theme.spacing(1.5),
                   }}
                 >
                   315 likes
                 </Typography>
               </Box>
               <Typography
-                color='white'
+                color={theme.palette.common.white}
                 sx={{
                   position: 'absolute',
-                  bottom: 40,
-                  left: 20,
+                  bottom: theme.spacing(4),
+                  left: theme.spacing(2),
                 }}
               >
                 Buse Karasakal
               </Typography>
               <Typography
-                color='lightgrey'
+                color={theme.palette.grey['400']}
                 fontSize={14}
                 noWrap
                 sx={{
                   position: 'absolute',
-                  bottom: 20,
-                  left: 20,
+                  bottom: theme.spacing(2),
+                  left: theme.spacing(2),
                   width: '85%',
                 }}
               >
@@ -110,7 +60,7 @@ export function ImageMasonry() {
                 asdasdasdasdasdasddsdfasdfasgdasgdasdg
               </Typography>
             </Stack>
-          </Box>
+          </MasonryImageWrapper>
         </Box>
       ))}
     </Masonry>
