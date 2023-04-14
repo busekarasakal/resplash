@@ -26,7 +26,6 @@ export function SubHeader(props: PropsWithChildren<{ title: string }>) {
           textAlign={isLargeScreenDevice ? 'left' : 'center'}
           noWrap
         >
-          sdgsadgasgdasgasdgasdgasdgsgasgdasdgds
           {props.title}
         </Typography>
       </Box>
