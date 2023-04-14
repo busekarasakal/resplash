@@ -13,3 +13,8 @@ export type ApiImage = {
     username: string;
   };
 };
+
+export type Option = {
+  label: string;
+  value: string;
+};

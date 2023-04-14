@@ -4,38 +4,12 @@ import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
 import SortIcon from '@mui/icons-material/Sort';
 import { Stack } from '@mui/material';
 import * as React from 'react';
-
-type PopupMenuOption = {
-  label: string;
-  value: string;
-};
-
-const ORIENTATION_OPTIONS = [
-  { label: 'All', value: '' },
-  { label: 'Landscape', value: 'landscape' },
-  { label: 'Portrait', value: 'portrait' },
-  { label: 'Squarish', value: 'squarish' },
-];
-
-const COLOR_OPTIONS = [
-  { label: 'All', value: '' },
-  { label: 'Black & White', value: 'black_and_white' },
-  { label: 'Black', value: 'black' },
-  { label: 'White', value: 'white' },
-  { label: 'Yellow', value: 'yellow' },
-  { label: 'Orange', value: 'orange' },
-  { label: 'Red', value: 'red' },
-  { label: 'Purple', value: 'purple' },
-  { label: 'Magenta', value: 'magenta' },
-  { label: 'Green', value: 'green' },
-  { label: 'Teal', value: 'teal' },
-  { label: 'Blue', value: 'blue' },
-];
-
-const SORT_OPTIONS = [
-  { label: 'Relevance', value: 'relevant' },
-  { label: 'Latest', value: 'latest' },
-];
+import {
+  COLOR_OPTIONS,
+  ORIENTATION_OPTIONS,
+  SORT_OPTIONS,
+} from '../../shared/constants';
+import { Option } from '../../shared/types';
 
 export function SearchMenuGroup({
   onOrientationChange,
@@ -45,11 +19,11 @@ export function SearchMenuGroup({
   sort,
   onSortChange,
 }: {
-  orientation: PopupMenuOption['value'];
+  orientation: Option['value'];
   onOrientationChange: (value: string) => void;
-  color: PopupMenuOption['value'];
+  color: Option['value'];
   onColorChange: (value: string) => void;
-  sort: PopupMenuOption['value'];
+  sort: Option['value'];
   onSortChange: (value: string) => void;
 }) {
   return (
@@ -58,7 +32,7 @@ export function SearchMenuGroup({
         options={COLOR_OPTIONS}
         text={
           (COLOR_OPTIONS.find((o) => o.value === color) ?? COLOR_OPTIONS[0])
-            ?.label ?? 'Color'
+            ?.label
         }
         icon={<ColorLensIcon />}
         value={color}

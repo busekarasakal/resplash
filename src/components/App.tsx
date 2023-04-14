@@ -11,14 +11,28 @@ import Box from '@mui/material/Box';
 import { SearchBar } from './SearchBar';
 import { useDebounce } from '../hooks/useDebounce';
 import { SearchMenuGroup } from './SearchMenuGroup';
+import { useParams } from 'react-router-dom';
+import { getValidatedParam } from '../shared/validators';
+import {
+  COLOR_OPTIONS,
+  ORIENTATION_OPTIONS,
+  SORT_OPTIONS,
+} from '../shared/constants';
 
 export default function App() {
   const { ref, inView } = useInView();
+  const params = useParams();
 
-  const [search, setSearch] = useState('');
-  const [orientation, setOrientation] = useState('');
-  const [color, setColor] = useState('');
-  const [sort, setSort] = useState('relevant');
+  const [search, setSearch] = useState(params.search ?? '');
+  const [orientation, setOrientation] = useState(
+    getValidatedParam(params.orientation, ORIENTATION_OPTIONS),
+  );
+  const [color, setColor] = useState(
+    getValidatedParam(params.color, COLOR_OPTIONS),
+  );
+  const [sort, setSort] = useState(
+    getValidatedParam(params.sort, SORT_OPTIONS),
+  );
   const debouncedSearch = useDebounce(search, 500);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetImages(
     { search: debouncedSearch || 'modern', orientation, color, sort },
