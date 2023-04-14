@@ -17,8 +17,9 @@ export const useGetImages = (query: {
   search?: string;
   color?: string;
   orientation?: string;
+  sort?: string;
 }) => {
-  const { search, color } = query;
+  const { search, color, orientation, sort } = query;
 
   const fetchImages = async ({ pageParam = 1 }) => {
     const url = new URL(API_ROOT);
@@ -30,6 +31,12 @@ export const useGetImages = (query: {
     if (color) {
       url.searchParams.append('color', color);
     }
+    if (orientation) {
+      url.searchParams.append('orientation', orientation);
+    }
+    if (sort) {
+      url.searchParams.append('order_by', sort);
+    }
 
     url.searchParams.append('per_page', '10');
 
@@ -39,7 +46,7 @@ export const useGetImages = (query: {
   };
 
   const getImages = useInfiniteQuery<GetImagesResponse>(
-    [GET_IMAGES_KEY, search],
+    [GET_IMAGES_KEY, search, orientation, color, sort],
     fetchImages,
     {
       enabled: false,

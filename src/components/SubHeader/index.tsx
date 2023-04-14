@@ -2,13 +2,10 @@ import * as React from 'react';
 import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { PopupMenu } from '../PopupMenu';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
-import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
-import SortIcon from '@mui/icons-material/Sort';
 import { useDeviceSize } from '../../hooks/useDeviceSize';
+import { PropsWithChildren } from 'react';
 
-export function SubHeader({ title }: { title: string }) {
+export function SubHeader(props: PropsWithChildren<{ title: string }>) {
   const { isLargeScreenDevice } = useDeviceSize();
 
   return (
@@ -24,42 +21,10 @@ export function SubHeader({ title }: { title: string }) {
           textAlign={isLargeScreenDevice ? 'left' : 'center'}
           noWrap
         >
-          {title}
+          {props.title}
         </Typography>
       </Box>
-      <Stack direction='row' gap={2}>
-        <PopupMenu
-          options={[
-            { label: 'Black and White', value: 'black_and_white' },
-            { label: 'Blue', value: 'blue' },
-          ]}
-          text='Color'
-          icon={<ColorLensIcon />}
-          value={'red'}
-          onChange={() => {}}
-          isNewFeature
-        />
-        <PopupMenu
-          options={[
-            { label: 'Landscape', value: 'landscape' },
-            { label: 'Portrait', value: 'portrait' },
-          ]}
-          text='Orientation'
-          icon={<AutoAwesomeMosaicIcon />}
-          value={'landscape'}
-          onChange={() => {}}
-        />
-        <PopupMenu
-          text='Sort'
-          options={[
-            { label: 'Relevance', value: 'relevance' },
-            { label: 'Latest', value: 'latest' },
-          ]}
-          icon={<SortIcon />}
-          value={'popular'}
-          onChange={() => {}}
-        />
-      </Stack>
+      {props.children}
     </Stack>
   );
 }

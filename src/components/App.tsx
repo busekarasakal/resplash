@@ -10,14 +10,18 @@ import { useInView } from 'react-intersection-observer';
 import Box from '@mui/material/Box';
 import { SearchBar } from './SearchBar';
 import { useDebounce } from '../hooks/useDebounce';
+import { SearchMenuGroup } from './SearchMenuGroup';
 
 export default function App() {
   const { ref, inView } = useInView();
 
   const [search, setSearch] = useState('');
+  const [orientation, setOrientation] = useState('');
+  const [color, setColor] = useState('');
+  const [sort, setSort] = useState('relevant');
   const debouncedSearch = useDebounce(search, 500);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetImages(
-    { search: debouncedSearch || 'modern' },
+    { search: debouncedSearch || 'modern', orientation, color, sort },
   );
   const images = useMemo(() => {
     return (
@@ -49,7 +53,16 @@ export default function App() {
         />
       </Header>
       <Body>
-        <SubHeader title={debouncedSearch} />
+        <SubHeader title={debouncedSearch}>
+          <SearchMenuGroup
+            orientation={orientation}
+            onOrientationChange={(value) => setOrientation(value)}
+            color={color}
+            onColorChange={(value) => setColor(value)}
+            sort={sort}
+            onSortChange={(value) => setSort(value)}
+          />
+        </SubHeader>
         <Box
           alignItems='center'
           sx={{
