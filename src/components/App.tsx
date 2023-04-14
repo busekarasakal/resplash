@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import { SearchBar } from './SearchBar';
 import { useDebounce } from '../hooks/useDebounce';
 import { SearchMenuGroup } from './SearchMenuGroup';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { getValidatedParam } from '../shared/validators';
 import {
   COLOR_OPTIONS,
@@ -21,26 +21,28 @@ import {
 
 export default function App() {
   const { ref, inView } = useInView();
-  const params = useParams();
+  const [params] = useSearchParams();
 
-  const [search, setSearch] = useState(params.search ?? '');
+  const [search, setSearch] = useState(params.get('search') ?? '');
   const [orientation, setOrientation] = useState(
-    getValidatedParam(params.orientation, ORIENTATION_OPTIONS),
+    getValidatedParam(params.get('orientation'), ORIENTATION_OPTIONS),
   );
   const [color, setColor] = useState(
-    getValidatedParam(params.color, COLOR_OPTIONS),
+    getValidatedParam(params.get('color'), COLOR_OPTIONS),
   );
   const [sort, setSort] = useState(
-    getValidatedParam(params.sort, SORT_OPTIONS),
+    getValidatedParam(params.get('sort'), SORT_OPTIONS),
   );
   const debouncedSearch = useDebounce(search, 500);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetImages(
-    { search: debouncedSearch || 'modern', orientation, color, sort },
+    { search: debouncedSearch, orientation, color, sort },
   );
   const images = useMemo(() => {
     return (
       data?.pages.reduce<ApiImage[]>((acc, page) => {
-        acc.push(...page.results);
+        if (page.results !== undefined) {
+          acc.push(...page.results);
+        }
 
         return acc;
       }, []) ?? []
