@@ -6,7 +6,7 @@ import { ApiImage } from '../../shared/types';
 export function ProgressiveImage({ image }: { image: ApiImage }) {
   const { src, isLoading } = useProgressiveImage(
     `${image.urls.raw}&w=10`,
-    `${image.urls.raw}&w=400`,
+    `${image.urls.raw}&w=300`,
   );
 
   return (

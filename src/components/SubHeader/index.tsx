@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Stack, useTheme } from '@mui/material';
+import { Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { PopupMenu } from '../PopupMenu';
@@ -8,7 +8,7 @@ import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
 import SortIcon from '@mui/icons-material/Sort';
 import { useDeviceSize } from '../../hooks/useDeviceSize';
 
-export function SubHeader() {
+export function SubHeader({ title }: { title: string }) {
   const { isLargeScreenDevice } = useDeviceSize();
 
   return (
@@ -24,7 +24,7 @@ export function SubHeader() {
           textAlign={isLargeScreenDevice ? 'left' : 'center'}
           noWrap
         >
-          Tokyo
+          {title}
         </Typography>
       </Box>
       <Stack direction='row' gap={2}>

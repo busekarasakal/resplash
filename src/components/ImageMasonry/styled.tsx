@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 
 export const MasonryImageWrapper = styled(Box)(() => ({
   cursor: 'pointer',
+  minHeight: 20,
   transition: 'all .1s ease-in-out',
   ':hover': {
     transition: 'all 0.5s ease',

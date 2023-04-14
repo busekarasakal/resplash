@@ -31,7 +31,7 @@ export const useGetImages = (query: {
       url.searchParams.append('color', color);
     }
 
-    url.searchParams.append('per_page', '20');
+    url.searchParams.append('per_page', '10');
 
     url.searchParams.append('page', pageParam.toString());
 
@@ -39,7 +39,7 @@ export const useGetImages = (query: {
   };
 
   const getImages = useInfiniteQuery<GetImagesResponse>(
-    [GET_IMAGES_KEY],
+    [GET_IMAGES_KEY, search],
     fetchImages,
     {
       enabled: false,

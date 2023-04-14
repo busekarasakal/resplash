@@ -1,14 +1,13 @@
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import SearchIcon from '@mui/icons-material/Search';
-import { InputAdornment, useTheme } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { AppLogo, Search, SearchIconWrapper, StyledInputBase } from './styled';
+import { AppLogo } from './styled';
+import { PropsWithChildren } from 'react';
 
-export function Header() {
+export function Header(props: PropsWithChildren<unknown>) {
   const theme = useTheme();
 
   return (
@@ -22,19 +21,7 @@ export function Header() {
       >
         <Toolbar>
           <AppLogo fontSize={'large'} />
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon color={'action'} />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder='Search…'
-              endAdornment={
-                <InputAdornment position='end'>
-                  <CloseIcon color={'action'} fontSize={'small'} />
-                </InputAdornment>
-              }
-            />
-          </Search>
+          {props.children}
           <Box flexGrow={1} />
           <Typography
             variant='h6'

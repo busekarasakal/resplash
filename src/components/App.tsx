@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ImageMasonry } from './ImageMasonry';
 import { Header } from './Header';
 import { SubHeader } from './SubHeader';
@@ -7,22 +7,33 @@ import { Body } from './Body';
 import { useGetImages } from '../hooks/useGetImages';
 import { ApiImage } from '../shared/types';
 import { useInView } from 'react-intersection-observer';
-import { useMemo } from 'react';
 import Box from '@mui/material/Box';
+import { SearchBar } from './SearchBar';
+import { useDebounce } from '../hooks/useDebounce';
 
 export default function App() {
   const { ref, inView } = useInView();
+
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 500);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetImages(
-    { search: 'dog' },
+    { search: debouncedSearch || 'modern' },
   );
   const images = useMemo(() => {
-    return data?.pages.reduce<ApiImage[]>(
-      (acc, page) => [...acc, ...page.results],
-      [],
+    return (
+      data?.pages.reduce<ApiImage[]>((acc, page) => {
+        acc.push(...page.results);
+
+        return acc;
+      }, []) ?? []
     );
   }, [data]);
 
-  React.useEffect(() => {
+  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  useEffect(() => {
     if (inView) {
       fetchNextPage();
     }
@@ -30,16 +41,24 @@ export default function App() {
 
   return (
     <Layout>
-      <Header />
+      <Header>
+        <SearchBar
+          value={search}
+          onChange={onSearchChange}
+          onClear={() => setSearch('')}
+        />
+      </Header>
       <Body>
-        <SubHeader />
+        <SubHeader title={debouncedSearch} />
         <Box
           alignItems='center'
           sx={{
             overflowAnchor: 'none',
           }}
         >
-          {data ? <ImageMasonry imageList={images ?? []} /> : null}
+          {images.length !== 0 ? (
+            <ImageMasonry imageList={images ?? []} />
+          ) : null}
           <Box
             ref={ref}
             height={30}
