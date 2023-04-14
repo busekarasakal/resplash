@@ -1,22 +1,19 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { useProgressiveImage } from '../../hooks/useProgressiveImage';
+import { ApiImage } from '../../shared/types';
 
-export function ProgressiveImage({
-  item,
-}: {
-  item: { img: string; title: string };
-}) {
+export function ProgressiveImage({ image }: { image: ApiImage }) {
   const { src, isLoading } = useProgressiveImage(
-    `${item.img}?w=10&auto=format`,
-    `${item.img}?w=400&auto=format`,
+    `${image.urls.raw}&w=10`,
+    `${image.urls.raw}&w=400`,
   );
 
   return (
     <Box id='progressive-img'>
       <img
         src={src}
-        alt={item.title}
+        alt={image.alt_description}
         loading='lazy'
         style={{
           display: 'block',

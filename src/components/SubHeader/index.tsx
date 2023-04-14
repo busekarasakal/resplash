@@ -9,7 +9,6 @@ import SortIcon from '@mui/icons-material/Sort';
 import { useDeviceSize } from '../../hooks/useDeviceSize';
 
 export function SubHeader() {
-  const theme = useTheme();
   const { isLargeScreenDevice } = useDeviceSize();
 
   return (
@@ -17,10 +16,6 @@ export function SubHeader() {
       direction={isLargeScreenDevice ? 'row' : 'column'}
       alignItems='center'
       gap={1}
-      sx={{
-        paddingLeft: theme.spacing(1.25),
-        paddingRight: theme.spacing(1.25),
-      }}
     >
       <Box width='100%'>
         <Typography
