@@ -49,7 +49,9 @@ export const useGetImages = (query: {
     [GET_IMAGES_KEY, search, orientation, color, sort],
     fetchImages,
     {
-      enabled: false,
+      enabled: true,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
       getNextPageParam: (lastPage, pages) => {
         if (lastPage.total_pages === pages.length) {
           return undefined;
