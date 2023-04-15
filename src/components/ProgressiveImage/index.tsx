@@ -13,7 +13,7 @@ export function ProgressiveImage({ image }: { image: ApiImage }) {
 
   useEffect(() => {
     const img = new Image();
-    img.src = `${image.urls.raw}&w=300`;
+    img.src = `${image.urls.raw}&w=600`;
     img.onload = () => {
       setImageObject(img);
     };
