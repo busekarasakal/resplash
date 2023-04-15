@@ -7,6 +7,7 @@ import { Stack, useTheme } from '@mui/material';
 import { ProgressiveImage } from '../ProgressiveImage';
 import { MasonryImageWrapper } from './styled';
 import { ApiImage } from '../../shared/types';
+import { Link } from 'react-router-dom';
 
 export function ImageMasonry({ imageList }: { imageList: ApiImage[] }) {
   const theme = useTheme();
@@ -21,46 +22,48 @@ export function ImageMasonry({ imageList }: { imageList: ApiImage[] }) {
     <Masonry columns={imageColumnSize} spacing={3} sx={{ width: 'auto' }}>
       {imageList.map((image) => (
         <Box key={`image_${image.id}`}>
-          <MasonryImageWrapper>
-            <ProgressiveImage image={image} />
-            <Stack>
-              <Box>
+          <Link to={image.links.html} target='_blank' rel='noopener noreferrer'>
+            <MasonryImageWrapper>
+              <ProgressiveImage image={image} />
+              <Stack>
+                <Box>
+                  <Typography
+                    color={theme.palette.common.white}
+                    sx={{
+                      position: 'absolute',
+                      top: theme.spacing(1.5),
+                      right: theme.spacing(1.5),
+                    }}
+                  >
+                    {`${image.likes} likes`}
+                  </Typography>
+                </Box>
                 <Typography
                   color={theme.palette.common.white}
                   sx={{
                     position: 'absolute',
-                    top: theme.spacing(1.5),
-                    right: theme.spacing(1.5),
+                    bottom: theme.spacing(4),
+                    left: theme.spacing(2),
                   }}
                 >
-                  {`${image.likes} likes`}
+                  {image.user.username}
                 </Typography>
-              </Box>
-              <Typography
-                color={theme.palette.common.white}
-                sx={{
-                  position: 'absolute',
-                  bottom: theme.spacing(4),
-                  left: theme.spacing(2),
-                }}
-              >
-                {image.user.username}
-              </Typography>
-              <Typography
-                color={theme.palette.grey['400']}
-                fontSize={14}
-                noWrap
-                sx={{
-                  position: 'absolute',
-                  bottom: theme.spacing(2),
-                  left: theme.spacing(2),
-                  width: '85%',
-                }}
-              >
-                {image.description}
-              </Typography>
-            </Stack>
-          </MasonryImageWrapper>
+                <Typography
+                  color={theme.palette.grey['400']}
+                  fontSize={14}
+                  noWrap
+                  sx={{
+                    position: 'absolute',
+                    bottom: theme.spacing(2),
+                    left: theme.spacing(2),
+                    width: '85%',
+                  }}
+                >
+                  {image.description}
+                </Typography>
+              </Stack>
+            </MasonryImageWrapper>
+          </Link>
         </Box>
       ))}
     </Masonry>
