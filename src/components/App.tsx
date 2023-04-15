@@ -1,27 +1,27 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { ImageMasonry } from './ImageMasonry';
-import { Header } from './Header';
-import { SubHeader } from './SubHeader';
-import { Layout } from './Layout';
-import { Body } from './Body';
-import { useGetImages } from '../hooks/useGetImages';
-import { ApiImage } from '../shared/types';
-import { useInView } from 'react-intersection-observer';
-import Box from '@mui/material/Box';
-import { SearchBar } from './SearchBar';
 import { useDebounce } from '../hooks/useDebounce';
-import { SearchMenuGroup } from './SearchMenuGroup';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  buildGetImagesUrlReplacement,
-  getSanitizedParam,
-} from '../shared/helpers';
+import { useGetImages } from '../hooks/useGetImages';
 import {
   COLOR_OPTIONS,
   ORIENTATION_OPTIONS,
   SORT_OPTIONS,
 } from '../shared/constants';
+import {
+  buildGetImagesUrlReplacement,
+  getSanitizedParam,
+} from '../shared/helpers';
+import { ApiImage } from '../shared/types';
+import { Body } from './Body';
+import { Header } from './Header';
+import { ImageMasonry } from './ImageMasonry';
+import { Layout } from './Layout';
+import { SearchBar } from './SearchBar';
+import { SearchMenuGroup } from './SearchMenuGroup';
+import { SubHeader } from './SubHeader';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function App() {
   const { ref, inView } = useInView();
@@ -41,32 +41,31 @@ export default function App() {
     getSanitizedParam(params.get('sort'), SORT_OPTIONS),
   );
 
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-    useGetImages(
-      { search: debouncedSearch, orientation, color, sort },
-      {
-        onSettled: () => {
-          const inputIsPristine =
-            search === '' &&
-            orientation === ORIENTATION_OPTIONS[0].value &&
-            color === COLOR_OPTIONS[0].value &&
-            sort === SORT_OPTIONS[0].value;
+  const { data, fetchNextPage, isFetching } = useGetImages(
+    { search: debouncedSearch, orientation, color, sort },
+    {
+      onSettled: () => {
+        const inputIsPristine =
+          search === '' &&
+          orientation === ORIENTATION_OPTIONS[0].value &&
+          color === COLOR_OPTIONS[0].value &&
+          sort === SORT_OPTIONS[0].value;
 
-          if (!inputIsPristine) {
-            const newRouteUrl = buildGetImagesUrlReplacement({
-              search: debouncedSearch,
-              orientation,
-              color,
-              sort,
-            });
+        if (!inputIsPristine) {
+          const newRouteUrl = buildGetImagesUrlReplacement({
+            search: debouncedSearch,
+            orientation,
+            color,
+            sort,
+          });
 
-            navigate(`/?${newRouteUrl}`, {
-              replace: true,
-            });
-          }
-        },
+          navigate(`/?${newRouteUrl}`, {
+            replace: true,
+          });
+        }
       },
-    );
+    },
+  );
   const images = useMemo(() => {
     return (
       data?.pages.reduce<ApiImage[]>((acc, page) => {
@@ -126,11 +125,7 @@ export default function App() {
             alignItems='center'
           >
             <Typography>
-              {isFetching
-                ? 'Loading...'
-                : hasNextPage
-                ? 'Load Newer'
-                : 'Nothing more to load'}
+              {isFetching ? 'Loading...' : 'Nothing more to load'}
             </Typography>
           </Box>
         </Box>
