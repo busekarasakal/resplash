@@ -1,3 +1,6 @@
+export const ACCESS_KEY = import.meta.env.VITE_IMAGE_API_KEY;
+export const API_ROOT = 'https://api.unsplash.com/search/photos';
+
 export const ORIENTATION_OPTIONS = [
   { label: 'All', value: '' },
   { label: 'Landscape', value: 'landscape' },

@@ -14,6 +14,19 @@ export type ApiImage = {
   };
 };
 
+export type GetImagesResponse = {
+  results: ApiImage[];
+  total: number;
+  total_pages: number;
+};
+
+export type GetImagesQuery = {
+  search: string;
+  color: string;
+  orientation: string;
+  sort: string;
+};
+
 export type Option = {
   label: string;
   value: string;

@@ -11,31 +11,60 @@ import Box from '@mui/material/Box';
 import { SearchBar } from './SearchBar';
 import { useDebounce } from '../hooks/useDebounce';
 import { SearchMenuGroup } from './SearchMenuGroup';
-import { useSearchParams } from 'react-router-dom';
-import { getValidatedParam } from '../shared/validators';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  buildGetImagesUrlReplacement,
+  getSanitizedParam,
+} from '../shared/helpers';
 import {
   COLOR_OPTIONS,
   ORIENTATION_OPTIONS,
   SORT_OPTIONS,
 } from '../shared/constants';
+import Typography from '@mui/material/Typography';
 
 export default function App() {
   const { ref, inView } = useInView();
+  const navigate = useNavigate();
   const [params] = useSearchParams();
 
   const [search, setSearch] = useState(params.get('search') ?? '');
+  const debouncedSearch = useDebounce(search, 500);
+
   const [orientation, setOrientation] = useState(
-    getValidatedParam(params.get('orientation'), ORIENTATION_OPTIONS),
+    getSanitizedParam(params.get('orientation'), ORIENTATION_OPTIONS),
   );
   const [color, setColor] = useState(
-    getValidatedParam(params.get('color'), COLOR_OPTIONS),
+    getSanitizedParam(params.get('color'), COLOR_OPTIONS),
   );
   const [sort, setSort] = useState(
-    getValidatedParam(params.get('sort'), SORT_OPTIONS),
+    getSanitizedParam(params.get('sort'), SORT_OPTIONS),
   );
-  const debouncedSearch = useDebounce(search, 500);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetImages(
     { search: debouncedSearch, orientation, color, sort },
+    {
+      onSettled: () => {
+        const inputIsPristine =
+          search === '' &&
+          orientation === ORIENTATION_OPTIONS[0].value &&
+          color === COLOR_OPTIONS[0].value &&
+          sort === SORT_OPTIONS[0].value;
+
+        if (!inputIsPristine) {
+          const newRouteUrl = buildGetImagesUrlReplacement({
+            search: debouncedSearch,
+            orientation,
+            color,
+            sort,
+          });
+
+          navigate(`/?${newRouteUrl}`, {
+            replace: true,
+          });
+        }
+      },
+    },
   );
   const images = useMemo(() => {
     return (
@@ -95,11 +124,13 @@ export default function App() {
             justifyContent='center'
             alignItems='center'
           >
-            {isFetchingNextPage
-              ? 'Loading more...'
-              : hasNextPage
-              ? 'Load Newer'
-              : 'Nothing more to load'}
+            <Typography>
+              {isFetchingNextPage
+                ? 'Loading more...'
+                : hasNextPage
+                ? 'Load Newer'
+                : 'Nothing more to load'}
+            </Typography>
           </Box>
         </Box>
       </Body>
