@@ -41,31 +41,32 @@ export default function App() {
     getSanitizedParam(params.get('sort'), SORT_OPTIONS),
   );
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetImages(
-    { search: debouncedSearch, orientation, color, sort },
-    {
-      onSettled: () => {
-        const inputIsPristine =
-          search === '' &&
-          orientation === ORIENTATION_OPTIONS[0].value &&
-          color === COLOR_OPTIONS[0].value &&
-          sort === SORT_OPTIONS[0].value;
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
+    useGetImages(
+      { search: debouncedSearch, orientation, color, sort },
+      {
+        onSettled: () => {
+          const inputIsPristine =
+            search === '' &&
+            orientation === ORIENTATION_OPTIONS[0].value &&
+            color === COLOR_OPTIONS[0].value &&
+            sort === SORT_OPTIONS[0].value;
 
-        if (!inputIsPristine) {
-          const newRouteUrl = buildGetImagesUrlReplacement({
-            search: debouncedSearch,
-            orientation,
-            color,
-            sort,
-          });
+          if (!inputIsPristine) {
+            const newRouteUrl = buildGetImagesUrlReplacement({
+              search: debouncedSearch,
+              orientation,
+              color,
+              sort,
+            });
 
-          navigate(`/?${newRouteUrl}`, {
-            replace: true,
-          });
-        }
+            navigate(`/?${newRouteUrl}`, {
+              replace: true,
+            });
+          }
+        },
       },
-    },
-  );
+    );
   const images = useMemo(() => {
     return (
       data?.pages.reduce<ApiImage[]>((acc, page) => {
@@ -125,8 +126,8 @@ export default function App() {
             alignItems='center'
           >
             <Typography>
-              {isFetchingNextPage
-                ? 'Loading more...'
+              {isFetching
+                ? 'Loading...'
                 : hasNextPage
                 ? 'Load Newer'
                 : 'Nothing more to load'}
