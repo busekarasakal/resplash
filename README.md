@@ -4,7 +4,7 @@ An Unsplash clone with new amazing features.
 
 ### Demo
 You can check out the demo here:
-https://resplashweb.netlify.net/
+https://resplashweb.netlify.app/
 
 ### Features
 - 🏛️ Sleek and modern UI
