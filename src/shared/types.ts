@@ -12,6 +12,9 @@ export type ApiImage = {
   user: {
     username: string;
   };
+  blur_hash: string;
+  width: number;
+  height: number;
 };
 
 export type GetImagesResponse = {
