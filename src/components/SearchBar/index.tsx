@@ -21,6 +21,7 @@ export function SearchBar({
         <SearchIcon color={'action'} />
       </SearchIconWrapper>
       <StyledInputBase
+        data-cy='search-input'
         value={value}
         onChange={onChange}
         placeholder='Search…'
@@ -31,7 +32,11 @@ export function SearchBar({
               onClick={onClear}
               sx={{ ':hover': { cursor: 'pointer' } }}
             >
-              <CloseIcon color={'action'} fontSize={'small'} />
+              <CloseIcon
+                color={'action'}
+                fontSize={'small'}
+                data-cy='clear-search'
+              />
             </InputAdornment>
           ) : null
         }

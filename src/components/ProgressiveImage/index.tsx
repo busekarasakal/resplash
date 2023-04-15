@@ -27,6 +27,7 @@ export function ProgressiveImage({ image }: { image: ApiImage }) {
         transition: isLoading ? 'none' : 'filter 0.2s ease-out',
       }}
       ref={ref}
+      data-cy='progressive-img'
     >
       {isLoading ? (
         <Blurhash

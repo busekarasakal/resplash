@@ -125,7 +125,7 @@ export default function App() {
             alignItems='center'
           >
             <Typography>
-              {isFetching ? 'Loading...' : 'Nothing more to load'}
+              {isFetching ? 'Loading...' : 'No results'}
             </Typography>
           </Box>
         </Box>
