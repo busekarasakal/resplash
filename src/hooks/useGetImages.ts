@@ -40,7 +40,6 @@ export const useGetImages = (
     [GET_IMAGES_KEY, search, orientation, color, sort],
     fetchImages,
     {
-      ...options,
       enabled: true,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
@@ -51,6 +50,7 @@ export const useGetImages = (
 
         return pages.length + 1;
       },
+      ...options,
     },
   );
 
